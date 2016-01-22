@@ -564,9 +564,9 @@ autoCraft = function () {
     ["oil", "kerosene", "craftKerosene", gamePage.science.get('oilProcessing').researched],
     ["culture", "parchment", "craftParchment", gamePage.science.get('construction').researched],
     ["culture", "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (gamePage.resPool.get('parchment').value > autoOptions.craftOptions.minParchmentAmount + 25 * autoOptions.craftOptions.manuscriptAmount)],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compendium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)],
+    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compedium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)],
     ["science", "compedium", "craftCompendium", gamePage.science.get('construction').researched && (gamePage.resPool.get('manuscript').value > autoOptions.craftOptions.minManuscriptAmount + 50 * autoOptions.craftOptions.compendiumAmount)],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compendium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)]
+    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compedium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)]
   ];
   for (var i = 0; i < resources.length; i++) {
     var curRes = gamePage.resPool.get(resources[i][0]);
