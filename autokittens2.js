@@ -174,11 +174,13 @@ function rebuildOptionsUI() {
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'parchmentAmount', 'When storage full, craft', 'parchment at a time');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'manuscriptMode', 'Auto-craft manuscripts', [['never', 0], ['all, before hunting', 1], ['on full culture storage', 2], ['both', 3]], '', 'changeFurCrafts()');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'manuscriptAmount', 'When storage full, craft', 'manuscript(s) at a time');
-  addIndent(uiContainer);addCheckbox(uiContainer, 'autoOptions.craftOptions', 'festivalBuffer', 'When crafting from full storage, preserve enough parchment to hold a festival');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'minParchmentAmount', 'When crafting manuscripts, preserve at least', 'parchment');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'compendiumMode', 'Auto-craft compendiums', [['never', 0], ['all, before hunting', 1], ['on full science storage', 2], ['both', 3]], '', 'changeFurCrafts()');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'compediumAmount', 'When storage full, craft', 'compendium(s) at a time');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'minManuscriptAmount', 'When crafting compendium, preserve at least', 'manuscript');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'blueprintMode', 'Auto-craft blueprints', [['never', 0], ['all, before hunting', 1], ['on full science storage', 2], ['both', 3]], '', 'changeFurCrafts()');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'blueprintAmount', 'When storage full, craft', 'blueprints(s) at a time');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'minCompendiumAmount', 'When crafting blueprint, preserve at least', 'compendium');
   addCheckbox(uiContainer, 'autoOptions.craftOptions', 'blueprintPriority', 'When crafting both from full storage, check blueprints before compendiums');
 
   addHeading(uiContainer, 'Auto-hunting');
@@ -270,15 +272,17 @@ var defaultOptions = {
     eludiumAmount: 1,
     craftKerosene: false,
     keroseneAmount: 1,
-    festivalBuffer: false,
     craftParchment: false,
     parchmentAmount: 1,
     craftManuscript: false,
     manuscriptAmount: 1,
+    minParchmentAmount: 0,
     craftCompendium: false,
     compediumAmount: 1,
+    minManuscriptAmount: 0,
     craftBlueprint: false,
     blueprintAmount: 1,
+    minCompendiumAmount: 0,
     blueprintPriority: false
   },
   furOptions: {
@@ -559,10 +563,10 @@ autoCraft = function () {
     ["unobtainium", "eludium", "craftEludium", gamePage.science.get('construction').researched],
     ["oil", "kerosene", "craftKerosene", gamePage.science.get('oilProcessing').researched],
     ["culture", "parchment", "craftParchment", gamePage.science.get('construction').researched],
-    ["culture", "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
-    ["science", "compedium", "craftCompendium", gamePage.science.get('construction').researched],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority]
+    ["culture", "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (gamePage.resPool.get('parchment').value > autoOptions.craftOptions.minParchmentAmount + 25 * autoOptions.craftOptions.manuscriptAmount)],
+    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compendium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)],
+    ["science", "compedium", "craftCompendium", gamePage.science.get('construction').researched && (gamePage.resPool.get('manuscript').value > autoOptions.craftOptions.minManuscriptAmount + 50 * autoOptions.craftOptions.compendiumAmount)],
+    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority && (gamePage.resPool.get('compendium').value > autoOptions.craftOptions.minCompendiumAmount + 25 * autoOptions.craftOptions.blueprintAmount)]
   ];
   for (var i = 0; i < resources.length; i++) {
     var curRes = gamePage.resPool.get(resources[i][0]);
