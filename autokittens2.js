@@ -487,7 +487,7 @@ var checkInterval = 200;
 // Based on http://www.reddit.com/r/kittensgame/comments/2eqlt5/a_few_kittens_game_scripts_ive_put_together/
 starClick = function () {
   if (autoOptions.autoStar) {
-    $("#gameLog").find("input").click();
+    $("#observeButton").find("input").click();
   }
 }
 
